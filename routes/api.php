@@ -1,0 +1,165 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\MagazineController;
+use App\Http\Controllers\BookletController;
+use App\Http\Controllers\CertificateTypeController;
+use App\Http\Controllers\CertificateRequestController;
+use App\Http\Controllers\IssuedCertificateController;
+
+/*
+|--------------------------------------------------------------------------
+| Authenticated User
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/me', function (Request $request) {
+    $user = $request->user();
+
+    return response()->json([
+        'user' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'can_add_article' => $user->can_add_article,
+        ]
+    ]);
+})->middleware('auth:sanctum');
+
+
+/*
+|--------------------------------------------------------------------------
+| Tags
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/tags', [TagController::class, 'index']);
+Route::get('/tags/{id}', [TagController::class, 'show']);
+
+Route::post('/tags', [TagController::class, 'store'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::put('/tags/{id}', [TagController::class, 'update'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::delete('/tags/{id}', [TagController::class, 'destroy'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+
+/*
+|--------------------------------------------------------------------------
+| Articles
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles/{id}', [ArticleController::class, 'show']);
+
+Route::post('/articles', [ArticleController::class, 'store'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::put('/articles/{id}', [ArticleController::class, 'update'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+
+/*
+|--------------------------------------------------------------------------
+| Magazines
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/magazines', [MagazineController::class, 'index']);
+Route::get('/magazines/{id}', [MagazineController::class, 'show']);
+
+Route::post('/magazines', [MagazineController::class, 'store'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::put('/magazines/{id}', [MagazineController::class, 'update'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::delete('/magazines/{id}', [MagazineController::class, 'destroy'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+
+/*
+|--------------------------------------------------------------------------
+| Booklets
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/booklets', [BookletController::class, 'index']);
+Route::get('/booklets/{id}', [BookletController::class, 'show']);
+
+Route::post('/booklets', [BookletController::class, 'store'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::put('/booklets/{id}', [BookletController::class, 'update'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::delete('/booklets/{id}', [BookletController::class, 'destroy'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::get('/certificate-types', [CertificateTypeController::class, 'index']);
+
+Route::post('/certificate-types', [CertificateTypeController::class, 'store'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::get('/certificate-types/{id}', [CertificateTypeController::class, 'show']);
+
+Route::put('/certificate-types/{id}', [CertificateTypeController::class, 'update'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+
+Route::post(
+    '/certificate-requests',
+    [CertificateRequestController::class, 'store']
+)->middleware('throttle:5,1');
+
+Route::get('/certificate-requests', [CertificateRequestController::class, 'index'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+Route::get('/certificate-requests/{id}', [CertificateRequestController::class, 'show'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+Route::patch('/certificate-requests/{id}/status', [CertificateRequestController::class, 'updateStatus'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::patch(
+    '/certificate-requests/{id}/confirm-payment',
+    [CertificateRequestController::class, 'confirmPayment']
+)->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::post(
+    '/certificate-requests/{id}/issue-certificate',
+    [IssuedCertificateController::class, 'store']
+)->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::get(
+    '/issued-certificates',
+    [IssuedCertificateController::class, 'index']
+)->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::get(
+    '/issued-certificates/{id}',
+    [IssuedCertificateController::class, 'show']
+)->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::get(
+    '/certificates/verify/{code}',
+    [IssuedCertificateController::class, 'verify']
+);
+
+Route::put(
+    '/issued-certificates/{id}',
+    [IssuedCertificateController::class, 'update']
+)->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::get(
+    '/admin/certificate-types',
+    [CertificateTypeController::class, 'adminIndex']
+)->middleware(['auth:sanctum', 'can:manage-content']);
