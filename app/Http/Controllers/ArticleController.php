@@ -33,6 +33,7 @@ class ArticleController extends Controller
             'user_id',
             'title',
             'cover_image',
+            'inner_image',
             'type',
             'slug',
             'created_at'
