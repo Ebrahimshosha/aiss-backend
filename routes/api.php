@@ -10,6 +10,7 @@ use App\Http\Controllers\BookletController;
 use App\Http\Controllers\CertificateTypeController;
 use App\Http\Controllers\CertificateRequestController;
 use App\Http\Controllers\IssuedCertificateController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -163,3 +164,22 @@ Route::get(
     '/admin/certificate-types',
     [CertificateTypeController::class, 'adminIndex']
 )->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::post('/articles/{article}/comments', [CommentController::class, 'store'])
+    ->middleware('throttle:5,1');
+
+Route::post('/articles/{article}/comments', [CommentController::class, 'store'])
+    ->middleware('throttle:5,1');
+
+Route::get('/articles/{article}/comments', [CommentController::class, 'index'])
+    ->middleware('throttle:60,1');
+
+
+Route::get('/admin/comments', [CommentController::class, 'adminIndex'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::patch('/admin/comments/{comment}/approve', [CommentController::class, 'approve'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::patch('/admin/comments/{comment}/reject', [CommentController::class, 'reject'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);

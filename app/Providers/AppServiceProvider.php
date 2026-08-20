@@ -5,6 +5,11 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use App\Models\Article;
+use App\Models\Magazine;
+use App\Models\Booklet;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +29,12 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manage-content', function (User $user) {
             return $user->can_add_article;
         });
+
+        Relation::enforceMorphMap([
+            'article' => Article::class,
+            'magazine' => Magazine::class,
+            'booklet' => Booklet::class,
+
+        ]);
     }
 }

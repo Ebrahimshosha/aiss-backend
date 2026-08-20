@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Article extends Model
 {
@@ -27,7 +28,12 @@ class Article extends Model
             'tag_id'
         );
     }
-    
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
     public function getCoverImageUrlAttribute(): ?string
     {
         return $this->getMediaUrl(
