@@ -183,3 +183,10 @@ Route::patch('/admin/comments/{comment}/approve', [CommentController::class, 'ap
 
 Route::patch('/admin/comments/{comment}/reject', [CommentController::class, 'reject'])
     ->middleware(['auth:sanctum', 'can:manage-content']);
+
+    Route::post('/magazines/{magazine}/comments', [CommentController::class, 'storeMagazine'])
+    ->middleware('throttle:5,1');
+
+Route::get('/magazines/{magazine}/comments', [CommentController::class, 'indexMagazine'])
+    ->middleware('throttle:60,1');
+    

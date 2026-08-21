@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Magazine extends Model
 {
@@ -53,5 +54,9 @@ class Magazine extends Model
 
         // الملفات الجديدة المخزنة بواسطة Laravel
         return asset('storage/' . $path);
+    }
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

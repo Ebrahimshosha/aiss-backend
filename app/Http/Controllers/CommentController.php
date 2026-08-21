@@ -6,16 +6,44 @@ use App\Http\Requests\StoreCommentRequest;
 use App\Models\Article;
 use Illuminate\Http\JsonResponse;
 use App\Models\Comment;
+use App\Models\Magazine;
 
 class CommentController extends Controller
 {
+
     public function store(
         StoreCommentRequest $request,
         Article $article
     ): JsonResponse {
+        return $this->storeComment($request, $article);
+    }
+
+    public function index(Article $article): JsonResponse
+    {
+        return $this->getApprovedComments($article);
+    }
+
+
+    public function storeMagazine(
+        StoreCommentRequest $request,
+        Magazine $magazine
+    ): JsonResponse {
+        return $this->storeComment($request, $magazine);
+    }
+
+    public function indexMagazine(Magazine $magazine): JsonResponse
+    {
+        return $this->getApprovedComments($magazine);
+    }
+
+
+    private function storeComment(
+        StoreCommentRequest $request,
+        Article|Magazine $commentable
+    ): JsonResponse {
         $data = $request->validated();
 
-        $comment = $article->comments()->make([
+        $comment = $commentable->comments()->make([
             'name' => $data['name'],
             'email' => $data['email'],
             'body' => $data['body'],
@@ -38,9 +66,11 @@ class CommentController extends Controller
         ], 201);
     }
 
-    public function index(Article $article): JsonResponse
-    {
-        $comments = $article->comments()
+
+    private function getApprovedComments(
+        Article|Magazine $commentable
+    ): JsonResponse {
+        $comments = $commentable->comments()
             ->where('status', 'approved')
             ->latest()
             ->get([
