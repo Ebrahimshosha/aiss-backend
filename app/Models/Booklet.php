@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Booklet extends Model
 {
@@ -25,6 +26,11 @@ class Booklet extends Model
         return $this->getMediaUrl(
             $this->attributes['file'] ?? null
         );
+    }
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     private function getMediaUrl(?string $path): ?string

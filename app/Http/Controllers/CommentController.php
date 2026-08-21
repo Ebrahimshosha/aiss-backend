@@ -7,6 +7,7 @@ use App\Models\Article;
 use Illuminate\Http\JsonResponse;
 use App\Models\Comment;
 use App\Models\Magazine;
+use App\Models\Booklet;
 
 class CommentController extends Controller
 {
@@ -23,7 +24,6 @@ class CommentController extends Controller
         return $this->getApprovedComments($article);
     }
 
-
     public function storeMagazine(
         StoreCommentRequest $request,
         Magazine $magazine
@@ -36,11 +36,11 @@ class CommentController extends Controller
         return $this->getApprovedComments($magazine);
     }
 
-
     private function storeComment(
         StoreCommentRequest $request,
-        Article|Magazine $commentable
+        Article|Magazine|Booklet $commentable
     ): JsonResponse {
+
         $data = $request->validated();
 
         $comment = $commentable->comments()->make([
@@ -66,9 +66,8 @@ class CommentController extends Controller
         ], 201);
     }
 
-
     private function getApprovedComments(
-        Article|Magazine $commentable
+        Article|Magazine|Booklet $commentable
     ): JsonResponse {
         $comments = $commentable->comments()
             ->where('status', 'approved')
@@ -142,5 +141,17 @@ class CommentController extends Controller
                 'status' => $comment->status,
             ],
         ]);
+    }
+
+    public function storeBooklet(
+        StoreCommentRequest $request,
+        Booklet $booklet
+    ): JsonResponse {
+        return $this->storeComment($request, $booklet);
+    }
+
+    public function indexBooklet(Booklet $booklet): JsonResponse
+    {
+        return $this->getApprovedComments($booklet);
     }
 }
