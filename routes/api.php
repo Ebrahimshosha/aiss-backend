@@ -11,6 +11,7 @@ use App\Http\Controllers\CertificateTypeController;
 use App\Http\Controllers\CertificateRequestController;
 use App\Http\Controllers\IssuedCertificateController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CodeStandardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,6 +108,29 @@ Route::put('/booklets/{id}', [BookletController::class, 'update'])
 Route::delete('/booklets/{id}', [BookletController::class, 'destroy'])
     ->middleware(['auth:sanctum', 'can:manage-content']);
 
+
+
+/*
+|--------------------------------------------------------------------------
+| Codes & Standards
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/code-standards', [CodeStandardController::class, 'index']);
+
+Route::get('/code-standards/{id}', [CodeStandardController::class, 'show']);
+
+Route::post('/code-standards', [CodeStandardController::class, 'store'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::put('/code-standards/{id}', [CodeStandardController::class, 'update'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+Route::delete('/code-standards/{id}', [CodeStandardController::class, 'destroy'])
+    ->middleware(['auth:sanctum', 'can:manage-content']);
+
+
+
 Route::get('/certificate-types', [CertificateTypeController::class, 'index']);
 
 Route::post('/certificate-types', [CertificateTypeController::class, 'store'])
@@ -168,8 +192,7 @@ Route::get(
 Route::post('/articles/{article}/comments', [CommentController::class, 'store'])
     ->middleware('throttle:5,1');
 
-Route::post('/articles/{article}/comments', [CommentController::class, 'store'])
-    ->middleware('throttle:5,1');
+
 
 Route::get('/articles/{article}/comments', [CommentController::class, 'index'])
     ->middleware('throttle:60,1');
@@ -194,3 +217,12 @@ Route::post('/booklets/{booklet}/comments', [CommentController::class, 'storeBoo
 
 Route::get('/booklets/{booklet}/comments', [CommentController::class, 'indexBooklet'])
     ->middleware('throttle:60,1');
+Route::post(
+    '/code-standards/{codeStandard}/comments',
+    [CommentController::class, 'storeCodeStandard']
+)->middleware('throttle:5,1');
+
+Route::get(
+    '/code-standards/{codeStandard}/comments',
+    [CommentController::class, 'indexCodeStandard']
+)->middleware('throttle:60,1');

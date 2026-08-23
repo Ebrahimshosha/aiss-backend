@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Models\Article;
 use App\Models\Magazine;
 use App\Models\Booklet;
+use App\Models\CodeStandard;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
             'article' => Article::class,
             'magazine' => Magazine::class,
             'booklet' => Booklet::class,
+            'code_standard' => CodeStandard::class,
 
         ]);
     }
