@@ -10,6 +10,7 @@ use App\Models\Magazine;
 use App\Models\Booklet;
 use App\Models\CodeStandard;
 use App\Models\Conference;
+use App\Models\Competition;
 
 class CommentController extends Controller
 {
@@ -40,7 +41,7 @@ class CommentController extends Controller
 
     private function storeComment(
         StoreCommentRequest $request,
-        Article|Magazine|Booklet|CodeStandard|Conference $commentable
+        Article|Magazine|Booklet|CodeStandard|Conference|Competition $commentable
     ): JsonResponse {
 
         $data = $request->validated();
@@ -69,7 +70,7 @@ class CommentController extends Controller
     }
 
     private function getApprovedComments(
-        Article|Magazine|Booklet|CodeStandard|Conference $commentable
+        Article|Magazine|Booklet|CodeStandard|Conference|Competition $commentable
     ): JsonResponse {
         $comments = $commentable->comments()
             ->where('status', 'approved')
@@ -180,5 +181,17 @@ class CommentController extends Controller
     public function indexConference(Conference $conference): JsonResponse
     {
         return $this->getApprovedComments($conference);
+    }
+
+    public function storeCompetition(
+        StoreCommentRequest $request,
+        Competition $competition
+    ): JsonResponse {
+        return $this->storeComment($request, $competition);
+    }
+
+    public function indexCompetition(Competition $competition): JsonResponse
+    {
+        return $this->getApprovedComments($competition);
     }
 }

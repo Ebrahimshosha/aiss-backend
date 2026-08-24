@@ -11,6 +11,7 @@ use App\Models\Magazine;
 use App\Models\Booklet;
 use App\Models\CodeStandard;
 use App\Models\Conference;
+use App\Models\Competition;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
             'booklet' => Booklet::class,
             'code_standard' => CodeStandard::class,
             'conference' => Conference::class,
-
+            'competition' => Competition::class,
         ]);
     }
 }

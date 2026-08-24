@@ -13,6 +13,7 @@ use App\Http\Controllers\IssuedCertificateController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CodeStandardController;
 use App\Http\Controllers\ConferenceController;
+use App\Http\Controllers\CompetitionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -245,3 +246,22 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/conferences/{conference}/comments', [CommentController::class, 'storeConference']);
 
 Route::get('/conferences/{conference}/comments', [CommentController::class, 'indexConference']);
+
+// Public Competition Routes
+Route::get('/competitions', [CompetitionController::class, 'index']);
+Route::get('/competitions/{competition}', [CompetitionController::class, 'show']);
+
+// Public Competition Comments
+Route::post('/competitions/{competition}/comments', [CommentController::class, 'storeCompetition']);
+Route::get('/competitions/{competition}/comments', [CommentController::class, 'indexCompetition']);
+
+// Admin Competition Routes
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/competitions', [CompetitionController::class, 'store']);
+
+    Route::put('/competitions/{competition}', [CompetitionController::class, 'update']);
+    Route::patch('/competitions/{competition}', [CompetitionController::class, 'update']);
+
+    Route::delete('/competitions/{competition}', [CompetitionController::class, 'destroy']);
+});
