@@ -12,6 +12,7 @@ use App\Http\Controllers\CertificateRequestController;
 use App\Http\Controllers\IssuedCertificateController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CodeStandardController;
+use App\Http\Controllers\ConferenceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -226,3 +227,18 @@ Route::get(
     '/code-standards/{codeStandard}/comments',
     [CommentController::class, 'indexCodeStandard']
 )->middleware('throttle:60,1');
+
+// Public Conference Routes
+Route::get('/conferences', [ConferenceController::class, 'index']);
+Route::get('/conferences/{conference}', [ConferenceController::class, 'show']);
+
+// Admin Conference Routes
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/conferences', [ConferenceController::class, 'store']);
+
+    Route::put('/conferences/{conference}', [ConferenceController::class, 'update']);
+    Route::patch('/conferences/{conference}', [ConferenceController::class, 'update']);
+
+    Route::delete('/conferences/{conference}', [ConferenceController::class, 'destroy']);
+});
