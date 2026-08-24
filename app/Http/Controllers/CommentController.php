@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Magazine;
 use App\Models\Booklet;
 use App\Models\CodeStandard;
+use App\Models\Conference;
 
 class CommentController extends Controller
 {
@@ -39,7 +40,7 @@ class CommentController extends Controller
 
     private function storeComment(
         StoreCommentRequest $request,
-        Article|Magazine|Booklet|CodeStandard $commentable
+        Article|Magazine|Booklet|CodeStandard|Conference $commentable
     ): JsonResponse {
 
         $data = $request->validated();
@@ -68,7 +69,7 @@ class CommentController extends Controller
     }
 
     private function getApprovedComments(
-        Article|Magazine|Booklet|CodeStandard $commentable
+        Article|Magazine|Booklet|CodeStandard|Conference $commentable
     ): JsonResponse {
         $comments = $commentable->comments()
             ->where('status', 'approved')
@@ -167,5 +168,17 @@ class CommentController extends Controller
         CodeStandard $codeStandard
     ): JsonResponse {
         return $this->getApprovedComments($codeStandard);
+    }
+
+    public function storeConference(
+        StoreCommentRequest $request,
+        Conference $conference
+    ): JsonResponse {
+        return $this->storeComment($request, $conference);
+    }
+
+    public function indexConference(Conference $conference): JsonResponse
+    {
+        return $this->getApprovedComments($conference);
     }
 }

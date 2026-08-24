@@ -40,4 +40,9 @@ class Conference extends Model
 
         return asset('storage/' . ltrim($this->image, '/'));
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

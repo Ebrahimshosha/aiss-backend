@@ -242,3 +242,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::delete('/conferences/{conference}', [ConferenceController::class, 'destroy']);
 });
+Route::post('/conferences/{conference}/comments', [CommentController::class, 'storeConference']);
+
+Route::get('/conferences/{conference}/comments', [CommentController::class, 'indexConference']);
