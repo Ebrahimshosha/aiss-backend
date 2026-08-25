@@ -15,6 +15,7 @@ use App\Http\Controllers\CodeStandardController;
 use App\Http\Controllers\ConferenceController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\ActorController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -280,4 +281,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/actors/{actor}', [ActorController::class, 'update']);
 
     Route::delete('/actors/{actor}', [ActorController::class, 'destroy']);
+});
+
+// Public Event Routes
+Route::get('/events', [EventController::class, 'index']);
+Route::get('/events/{event}', [EventController::class, 'show']);
+
+// Admin Event Routes
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/events', [EventController::class, 'store']);
+
+    Route::put('/events/{event}', [EventController::class, 'update']);
+    Route::patch('/events/{event}', [EventController::class, 'update']);
+
+    Route::delete('/events/{event}', [EventController::class, 'destroy']);
 });
