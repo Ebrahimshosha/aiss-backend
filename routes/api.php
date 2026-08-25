@@ -14,6 +14,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CodeStandardController;
 use App\Http\Controllers\ConferenceController;
 use App\Http\Controllers\CompetitionController;
+use App\Http\Controllers\ActorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -264,4 +265,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/competitions/{competition}', [CompetitionController::class, 'update']);
 
     Route::delete('/competitions/{competition}', [CompetitionController::class, 'destroy']);
+});
+
+// Public Actor Routes
+Route::get('/actors', [ActorController::class, 'index']);
+Route::get('/actors/{actor}', [ActorController::class, 'show']);
+
+// Admin Actor Routes
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/actors', [ActorController::class, 'store']);
+
+    Route::put('/actors/{actor}', [ActorController::class, 'update']);
+    Route::patch('/actors/{actor}', [ActorController::class, 'update']);
+
+    Route::delete('/actors/{actor}', [ActorController::class, 'destroy']);
 });
