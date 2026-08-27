@@ -297,3 +297,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::delete('/events/{event}', [EventController::class, 'destroy']);
 });
+
+
+Route::get('/tags/{id}/articles', [TagController::class, 'articles']);

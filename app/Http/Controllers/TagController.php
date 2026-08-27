@@ -95,4 +95,42 @@ class TagController extends Controller
             'message' => 'Tag deleted successfully'
         ]);
     }
+    public function articles(int $id)
+    {
+        $tag = Tag::find($id);
+
+        if (!$tag) {
+            return response()->json([
+                'message' => 'Tag not found'
+            ], 404);
+        }
+
+        $articles = $tag->articles()
+            ->orderByDesc('user_articles.id')
+            ->paginate(10, [
+                'user_articles.id',
+                'user_articles.title',
+                'user_articles.slug',
+                'user_articles.cover_image',
+                'user_articles.created_at',
+            ]);
+
+        $articles->through(function ($article) {
+            return [
+                'id' => $article->id,
+                'title' => $article->title,
+                'slug' => $article->slug,
+                'cover_image_url' => $article->cover_image_url,
+            ];
+        });
+
+        return response()->json([
+            'tag' => [
+                'id' => $tag->id,
+                'name' => $tag->name,
+                'slug' => $tag->slug,
+            ],
+            'articles' => $articles,
+        ]);
+    }
 }
