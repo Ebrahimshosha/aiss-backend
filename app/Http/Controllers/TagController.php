@@ -130,7 +130,7 @@ class TagController extends Controller
                 'name' => $tag->name,
                 'slug' => $tag->slug,
             ],
-            'articles' => $articles,
+            'articles' => $articles->items(),
         ]);
     }
 }
